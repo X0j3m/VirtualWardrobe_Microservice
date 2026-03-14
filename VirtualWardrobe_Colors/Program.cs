@@ -1,10 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+using VirtualWardrobe_Colors.Data;
+using VirtualWardrobe_Colors.Model;
+using VirtualWardrobe_Colors.Service;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddDbContext<ColorsContext>(
+    options =>
+    {
+        options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=VirtualWardrobe_Colors;Trusted_Connection=True;TrustServerCertificate=True;");
+    }
+    );
+
+builder.Services.AddScoped<ColorsService>();
+builder.Services.AddScoped<ColorsRepository>();
+
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
 
 var app = builder.Build();
 

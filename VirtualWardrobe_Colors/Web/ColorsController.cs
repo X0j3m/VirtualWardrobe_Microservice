@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using VirtualWardrobe_Colors.Data;
+using VirtualWardrobe_Colors.Model;
+using VirtualWardrobe_Colors.Service;
 using VirtualWardrobe_Colors.Web.Dto;
 
 namespace VirtualWardrobe_Colors.Web
@@ -7,73 +10,65 @@ namespace VirtualWardrobe_Colors.Web
     [Route("api/colors")]
     public class ColorsController : ControllerBase
     {
-        // In-memory data store for test purposes
-        private static List<ColorDto> _colors = new()
+        private readonly ColorsService _colorsService;
+
+        public ColorsController(ColorsService colorsService)
         {
-            new ColorDto(Guid.Parse("11111111-1111-1111-1111-111111111111"), "Red"),
-            new ColorDto(Guid.Parse("22222222-2222-2222-2222-222222222222"), "Green"),
-            new ColorDto(Guid.Parse("33333333-3333-3333-3333-333333333333"), "Blue")
-        };
+            _colorsService = colorsService;
+        }
 
         [HttpGet]
         public ActionResult<IEnumerable<ColorDto>> GetColors()
         {
-            return Ok(_colors);
+            var colors = _colorsService.GetColors();
+            if (colors == null)
+            {
+                return NotFound();
+            }
+            else if (colors.Any())
+            {
+                return Ok(colors);
+            }
+            return NoContent();
         }
 
         [HttpGet]
         [Route("{id}")]
         public ActionResult<ColorDto> GetColor(Guid id)
         {
-            var found = _colors.Where(i => i.Id == id).FirstOrDefault();
-
-            if (found != null)
+            var color = _colorsService.GetColor(id);
+            if (color == null)
             {
-                return Ok(found);
+                return NotFound();
             }
-            return NotFound();
+            return Ok(color);
         }
 
         [HttpPost]
         public ActionResult<ColorDto> CreateColor(CreateColorDto createColorDto)
         {
-            var created = new ColorDto(Guid.NewGuid(), createColorDto.Name);
-            _colors.Add(created);
-
-            if (_colors.Contains(created))
-            {
-                return CreatedAtAction(nameof(GetColor), new { id = created.Id }, created);
-            }
-            return BadRequest();
+            var color = _colorsService.CreateColor(createColorDto);
+            return CreatedAtAction(nameof(GetColor), new { id = color.Id }, color);
         }
 
         [HttpPut]
+        [Route("{id}")]
         public ActionResult<ColorDto> UpdateColor(Guid id, UpdateColorDto updateColorDto)
         {
-            var found = _colors.Where(i => i.Id == id).FirstOrDefault();
-            if (found != null)
-            {
-                if (updateColorDto.Name != null)
-                {
-                    found = found with { Name = updateColorDto.Name };
-                }
-
-                return CreatedAtAction(nameof(GetColor), new { id = found.Id }, found);
-            }
-            return NotFound();
+            var color = _colorsService.UpdateColor(id, updateColorDto);
+            return CreatedAtAction(nameof(GetColor), new { id = color.Id }, color);
         }
 
         [HttpDelete]
         [Route("{id}")]
         public ActionResult DeleteColor(Guid id)
         {
-            var found = _colors.Where(i => i.Id == id).FirstOrDefault();
-            if (found != null)
+            var deleted = _colorsService.DeleteColor(id);
+            if (!deleted)
             {
-                _colors.Remove(found);
-                return NoContent();
+                return NotFound();
             }
-            return NotFound();
+            return NoContent();
         }
     }
 }
