@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VirtualWardrobe_Colors.Model;
 
-namespace VirtualWardrobe_Colors.Model
+namespace VirtualWardrobe_Colors.Data
 {
     public class ColorsContext : DbContext
     {
