@@ -1,49 +1,51 @@
-﻿using Microsoft.EntityFrameworkCore;
-using VirtualWardrobe_Colors.Model;
+﻿using VirtualWardrobe_Colors.Model;
 
 namespace VirtualWardrobe_Colors.Data
 {
     public class ColorsRepository
     {
-        private readonly ColorsContext _context;
+        private readonly ColorsDbContext _context;
 
-        public ColorsRepository(ColorsContext context)
+        public ColorsRepository(ColorsDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<Color> GetAllColors()
+        public bool Exists(Guid id)
+        {
+            return _context.Colors.Any(c => c.Id == id);
+        }
+
+        public ICollection<Color> GetAllColors()
         {
             return _context.Colors.ToList();
         }
 
         public Color GetColorById(Guid id)
         {
-            var found = _context.Colors.FirstOrDefault(c => c.Id == id);
-            if (found != null)
+            if (Exists(id))
             {
-                return found;                
+                return _context.Colors.First(c => c.Id == id);
             }
             throw new KeyNotFoundException($"Color with id {id} not found.");
         }
 
         public void AddColor(Color color)
         {
-            var found = _context.Colors.FirstOrDefault(c => c.Id == color.Id);
-            if (found != null)
+            if (Exists(color.Id))
             {
-                _context.Colors.Add(color);
-                _context.SaveChanges();
-                return;
+                throw new InvalidOperationException($"Color with id {color.Id} already exists.");
             }
-            throw new InvalidOperationException($"Color with id {color.Id} already exists.");
+            _context.Colors.Add(color);
+            _context.SaveChanges();
+            return;
         }
 
         public void UpdateColor(Color color)
         {
-            var found = _context.Colors.FirstOrDefault(c => c.Id == color.Id);
-            if (found != null)
+            if (Exists(color.Id))
             {
+                var found = GetColorById(color.Id);
                 found.Name = color.Name;
                 _context.SaveChanges();
                 return;
@@ -53,9 +55,9 @@ namespace VirtualWardrobe_Colors.Data
 
         public void DeleteColor(Guid id)
         {
-            var found = _context.Colors.FirstOrDefault(c => c.Id == id);
-            if (found != null)
+            if (Exists(id))
             {
+                var found = GetColorById(id);
                 _context.Colors.Remove(found);
                 _context.SaveChanges();
                 return;

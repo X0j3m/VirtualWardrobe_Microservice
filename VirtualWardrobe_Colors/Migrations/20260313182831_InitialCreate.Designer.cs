@@ -12,7 +12,7 @@ using VirtualWardrobe_Colors.Data;
 
 namespace VirtualWardrobe_Colors.Migrations
 {
-    [DbContext(typeof(ColorsContext))]
+    [DbContext(typeof(ColorsDbContext))]
     [Migration("20260313182831_InitialCreate")]
     partial class InitialCreate
     {

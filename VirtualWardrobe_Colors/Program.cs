@@ -6,10 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddDbContext<ColorsContext>(
+builder.Services.AddDbContext<ColorsDbContext>(
     options =>
     {
-        options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=VirtualWardrobe_Colors;Trusted_Connection=True;TrustServerCertificate=True;");
+        options.UseSqlServer("DefaultConnection");
     }
     );
 
