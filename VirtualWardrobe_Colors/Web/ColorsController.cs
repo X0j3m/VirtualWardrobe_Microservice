@@ -7,7 +7,7 @@ using VirtualWardrobe_Colors.Web.Dto;
 namespace VirtualWardrobe_Colors.Web
 {
     [ApiController]
-    [Route("api/colors")]
+    [Route("api/[controller]")]
     public class ColorsController : ControllerBase
     {
         private readonly ColorsService _colorsService;

@@ -11,7 +11,7 @@ using VirtualWardrobe_Colors.Data;
 
 namespace VirtualWardrobe_Colors.Migrations
 {
-    [DbContext(typeof(ColorsContext))]
+    [DbContext(typeof(ColorsDbContext))]
     partial class ColorsContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

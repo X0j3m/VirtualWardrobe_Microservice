@@ -13,15 +13,15 @@ namespace VirtualWardrobe_Colors.Service
             _repository = repository;
         }
 
-        public IEnumerable<ColorDto> GetColors()
+        public ICollection<ColorDto> GetColors()
         {
-            var colors = _repository.GetAllColors().Select(c => c.ToDto());
-            return colors;
+            ICollection<Color> colors = _repository.GetAllColors();
+            return colors.Select(c => c.ToDto()).ToList();
         }
 
         public ColorDto GetColor(Guid id)
         {
-            var color = _repository.GetColorById(id);
+            Color color = _repository.GetColorById(id);
             return color.ToDto();
         }
 
@@ -29,18 +29,13 @@ namespace VirtualWardrobe_Colors.Service
         {
             var color = new Color
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.CreateVersion7(),
                 Name = createColorDto.Name,
             };
-            try
-            {
-                _repository.AddColor(color);
-                return color.ToDto();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return null;
-            }
+
+            _repository.AddColor(color);
+            return color.ToDto();
+
         }
 
         public ColorDto UpdateColor(Guid id, UpdateColorDto updateColorDto)
