@@ -28,24 +28,18 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
             };
         }
 
-        public static IEnumerable<object[]> GetColorsTestData()
+        public static IEnumerable<object[]> GetExistingColorsTestMemberData()
         {
             var colors = GetRawColors();
             foreach (var color in colors)
             {
-                yield return new object[] { color.Id, color };
+                yield return new object[] { color };
             }
         }
 
-        public static IEnumerable<object[]> GetNotExistingColor()
+        public static IEnumerable<object[]> GetNotExistingColorTestMemberData()
         {
-            yield return new object[] { new Color { Id = Guid.Parse("00000000-0000-0000-0000-000000000005"), Name = "White" } };
-        }
-
-        public static IEnumerable<object[]> GetExistingColor()
-        {
-            var color = GetRawColors().First();
-            yield return new object[] { color };
+            yield return new object[] { new Color { Id = Guid.Parse("99999999-9999-9999-9999-999999999999"), Name = "White" } };
         }
 
         // Constructor
@@ -66,18 +60,25 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
 
         // Tests
         [Theory]
-        [InlineData("00000000-0000-0000-0000-000000000001", true)]
-        [InlineData("00000000-0000-0000-0000-000000000002", true)]
-        [InlineData("00000000-0000-0000-0000-000000000003", true)]
-        [InlineData("00000000-0000-0000-0000-000000000004", true)]
-        [InlineData("00000000-0000-0000-0000-000000000005", false)]
-        public void ColorsRepository_Exists_ReturnsBool(Guid guid, bool expected)
+        [MemberData(nameof(GetExistingColorsTestMemberData))]
+        public void ColorsRepository_Exists_ReturnsTrue(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
 
-            var result = repository.Exists(guid);
+            var result = repository.Exists(color.Id);
 
-            Assert.Equal(expected, result);
+            Assert.True(result);
+        }
+
+        [Theory]
+        [MemberData(nameof(GetNotExistingColorTestMemberData))]
+        public void ColorsRepository_Exists_ReturnsFalse(Color color)
+        {
+            var repository = new ColorsRepository(_mockDbContext.Object);
+
+            var result = repository.Exists(color.Id);
+
+            Assert.False(result);
         }
 
         [Fact]
@@ -96,7 +97,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetExistingColor))]
+        [MemberData(nameof(GetExistingColorsTestMemberData))]
         public void ColorsRepository_GetColorById_ReturnsColor(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -108,7 +109,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetNotExistingColor))]
+        [MemberData(nameof(GetNotExistingColorTestMemberData))]
         public void ColorsRepository_GetColorById_ThrowsKeyNotFoundException(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -117,7 +118,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetNotExistingColor))]
+        [MemberData(nameof(GetNotExistingColorTestMemberData))]
         public void ColorsRepository_AddColor_Passes(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -128,7 +129,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetExistingColor))]
+        [MemberData(nameof(GetExistingColorsTestMemberData))]
         public void ColorsRepository_AddColor_ThrowsInvalidOperationException(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -137,7 +138,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetExistingColor))]
+        [MemberData(nameof(GetExistingColorsTestMemberData))]
         public void ColorsRepository_UpdateColor_Passes(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -148,7 +149,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetNotExistingColor))]
+        [MemberData(nameof(GetNotExistingColorTestMemberData))]
         public void ColorsRepository_UpdateColor_ThrowsKeyNotFoundException(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -157,7 +158,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetExistingColor))]
+        [MemberData(nameof(GetExistingColorsTestMemberData))]
         public void ColorsRepository_DeleteColor_Passes(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
@@ -168,7 +169,7 @@ namespace VirtualWardrobe_Colors.Tests.DataTests
         }
 
         [Theory]
-        [MemberData(nameof(GetNotExistingColor))]
+        [MemberData(nameof(GetNotExistingColorTestMemberData))]
         public void ColorsRepository_DeleteColor_ThrowsKeyNotFoundException(Color color)
         {
             var repository = new ColorsRepository(_mockDbContext.Object);
