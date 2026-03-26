@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="VirtualWardrobe_Colors.Tests/VirtualWardrobe_Colors.Tests.csproj" Id="65cc5840-1c78-417f-8e1d-03e9bc3bc212" />
   <Project Path="VirtualWardrobe_Colors/VirtualWardrobe_Colors.csproj" Id="409cc256-e0d3-4eff-9755-aa07aef0e6d9" />
 </Solution>
