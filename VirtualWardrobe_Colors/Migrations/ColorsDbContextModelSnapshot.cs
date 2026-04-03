@@ -3,21 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VirtualWardrobe_Colors.Data;
-
 
 #nullable disable
 
 namespace VirtualWardrobe_Colors.Migrations
 {
     [DbContext(typeof(ColorsDbContext))]
-    [Migration("20260313182831_InitialCreate")]
-    partial class InitialCreate
+    partial class ColorsDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
