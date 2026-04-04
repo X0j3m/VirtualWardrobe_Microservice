@@ -1,8 +1,9 @@
-﻿using VirtualWardrobe_Colors.Model;
+﻿using VirtualWardrobe_Colors.Interfaces;
+using VirtualWardrobe_Colors.Model;
 
 namespace VirtualWardrobe_Colors.Data
 {
-    public class ColorsRepository
+    public class ColorsRepository : IColorsRepository
     {
         private readonly ColorsDbContext _context;
 
@@ -14,6 +15,16 @@ namespace VirtualWardrobe_Colors.Data
         public bool Exists(Guid id)
         {
             return _context.Colors.Any(c => c.Id == id);
+        }
+
+        public bool Exists(string name)
+        {
+            return _context.Colors.Any(c => c.Name == name);
+        }
+
+        public bool Exists(Color color)
+        {
+            return Exists(color.Id) || Exists(color.Name);
         }
 
         public ICollection<Color> GetAllColors()
@@ -32,9 +43,9 @@ namespace VirtualWardrobe_Colors.Data
 
         public void AddColor(Color color)
         {
-            if (Exists(color.Id))
+            if (Exists(color))
             {
-                throw new InvalidOperationException($"Color with id {color.Id} already exists.");
+                throw new InvalidOperationException($"Color {color} already exists.");
             }
             _context.Colors.Add(color);
             _context.SaveChanges();
@@ -45,6 +56,10 @@ namespace VirtualWardrobe_Colors.Data
         {
             if (Exists(color.Id))
             {
+                if(Exists(color.Name))
+                {
+                    throw new InvalidOperationException($"Color with name {color.Name} already exists.");
+                }
                 var found = GetColorById(color.Id);
                 found.Name = color.Name;
                 _context.SaveChanges();

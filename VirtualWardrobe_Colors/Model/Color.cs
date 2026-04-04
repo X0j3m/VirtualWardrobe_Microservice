@@ -1,4 +1,4 @@
-﻿using VirtualWardrobe_Colors.Web.Dto;
+﻿using VirtualWardrobe_Colors.Dto;
 
 namespace VirtualWardrobe_Colors.Model
 {

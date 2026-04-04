@@ -12,7 +12,7 @@ using VirtualWardrobe_Colors.Data;
 namespace VirtualWardrobe_Colors.Migrations
 {
     [DbContext(typeof(ColorsDbContext))]
-    [Migration("20260403162938_InitialCreate")]
+    [Migration("20260404110641_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,9 +33,12 @@ namespace VirtualWardrobe_Colors.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Colors");
                 });

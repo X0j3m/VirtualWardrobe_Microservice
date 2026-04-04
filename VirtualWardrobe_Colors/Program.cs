@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VirtualWardrobe_Colors.Data;
+using VirtualWardrobe_Colors.Interfaces;
 using VirtualWardrobe_Colors.Service;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,7 @@ builder.Services.AddDbContext<ColorsDbContext>(options =>
 });
 
 builder.Services.AddScoped<ColorsService>();
-builder.Services.AddScoped<ColorsRepository>();
+builder.Services.AddScoped<IColorsRepository, ColorsRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

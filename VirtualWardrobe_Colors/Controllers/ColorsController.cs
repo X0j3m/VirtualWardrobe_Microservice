@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using VirtualWardrobe_Colors.Data;
+using VirtualWardrobe_Colors.Dto;
 using VirtualWardrobe_Colors.Model;
 using VirtualWardrobe_Colors.Service;
-using VirtualWardrobe_Colors.Web.Dto;
 
 namespace VirtualWardrobe_Colors.Web
 {

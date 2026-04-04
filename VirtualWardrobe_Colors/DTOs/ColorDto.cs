@@ -1,4 +1,4 @@
-﻿namespace VirtualWardrobe_Colors.Web.Dto
+﻿namespace VirtualWardrobe_Colors.Dto
 {
     public record ColorDto(Guid Id, string Name);
 
