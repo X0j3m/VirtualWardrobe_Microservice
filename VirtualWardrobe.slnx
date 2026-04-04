@@ -1,1 +1,8 @@
-<Solution />
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/VirtualWardrobe_Colors/VirtualWardrobe_Colors.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/VirtualWardrobe_Colors.Tests/VirtualWardrobe_Colors.Tests.csproj" />
+  </Folder>
+</Solution>
