@@ -1,19 +1,22 @@
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using VirtualWardrobe_ClothesTypes.Data;
-using VirtualWardrobe_ClothesTypes.Service;
+using VirtualWardrobe_ClothesTypes.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // Add services to the container.
-builder.Services.AddDbContext<ClothesTypeContext>(
+builder.Services.AddDbContext<ClothesTypeDbContext>(
     options =>
     {
-        options.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=VirtualWardrobe_ClothesTypes;Trusted_Connection=True;TrustServerCertificate=True;");
+        options.UseSqlServer(connectionString);
     }
     );
-builder.Services.AddScoped<ClothesTypeService>();
-builder.Services.AddScoped<ClothesTypeRepository>();
+
+builder.Services.AddScoped<IClothesTypeRepository, ClothesTypeRepository>();
+builder.Services.AddScoped<IClothesLayerRepository, ClothesLayerRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

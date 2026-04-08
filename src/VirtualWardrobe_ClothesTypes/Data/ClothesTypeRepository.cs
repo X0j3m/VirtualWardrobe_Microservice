@@ -1,49 +1,70 @@
-﻿using System.Data.Entity;
+﻿using VirtualWardrobe_ClothesTypes.Interface;
 using VirtualWardrobe_ClothesTypes.Model;
 
 namespace VirtualWardrobe_ClothesTypes.Data
 {
-    public class ClothesTypeRepository
+    public class ClothesTypeRepository : IClothesTypeRepository
     {
-        private readonly ClothesTypeContext _context;
+        private readonly ClothesTypeDbContext _context;
 
-        public ClothesTypeRepository(ClothesTypeContext context)
+        public ClothesTypeRepository(ClothesTypeDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<ClothesType> GetAllClothesTypes()
+        public bool Exists(Guid id)
+        {
+            return _context.ClothesTypes.Any(x => x.Id == id);
+        }
+
+        public bool Exists(string name)
+        {
+            return _context.ClothesTypes.Any(x => x.Name == name);
+        }
+
+        public bool Exists(ClothesType clothesType)
+        {
+            return Exists(clothesType.Id) && Exists(clothesType.Name);
+        }
+
+        public ICollection<ClothesType> GetAllClothesTypes()
         {
             return _context.ClothesTypes.ToList();
         }
 
         public ClothesType GetClothesTypeById(Guid id)
         {
-            var found = _context.ClothesTypes.FirstOrDefault(x => x.Id == id);
-            if (found != null)
+            if (Exists(id))
             {
-                return found;
+                return _context.ClothesTypes.First(x => x.Id == id);
             }
             throw new KeyNotFoundException($"Clothes Type with id {id} not found.");
         }
 
-        public void AddClothesType(ClothesType clothesType)
+        public void CreateClothesType(ClothesType clothesType)
         {
-            var found = _context.ClothesTypes.FirstOrDefault(x => x.Id == clothesType.Id);
-            if (found == null)
+            if (Exists(clothesType.Id))
             {
-                _context.ClothesTypes.Add(clothesType);
-                _context.SaveChanges();
-                return;
+                throw new InvalidOperationException($"Clothes Type with id {clothesType.Id} already exists.");
             }
-            throw new InvalidOperationException($"Clothes Type with id {clothesType.Id} already exists.");
+            if (Exists(clothesType.Name))
+            {
+                throw new InvalidOperationException($"Clothes Type with name {clothesType.Name} already exists.");
+            }
+            _context.ClothesTypes.Add(clothesType);
+            _context.SaveChanges();
+            return;
         }
 
         public void UpdateClothesType(ClothesType clothesType)
         {
-            var found = _context.ClothesTypes.FirstOrDefault(x => x.Id == clothesType.Id);
-            if (found != null)
+            if (Exists(clothesType.Id))
             {
+                if(Exists(clothesType.Name))
+                {
+                    throw new InvalidOperationException($"Clothes Type with name {clothesType.Name} already exists.");
+                }
+                var found = _context.ClothesTypes.First(x => x.Id == clothesType.Id);
                 found = clothesType;
                 _context.SaveChanges();
                 return;
@@ -53,9 +74,9 @@ namespace VirtualWardrobe_ClothesTypes.Data
 
         public void DeleteClothesType(Guid id)
         {
-            var found = _context.ClothesTypes.FirstOrDefault(x => x.Id == id);
-            if (found != null)
+            if(Exists(id))
             {
+                var found = _context.ClothesTypes.First(x => x.Id == id);
                 _context.ClothesTypes.Remove(found);
                 _context.SaveChanges();
                 return;

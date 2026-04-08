@@ -1,13 +1,11 @@
-﻿namespace VirtualWardrobe_ClothesTypes.Model
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace VirtualWardrobe_ClothesTypes.Model
 {
-    public enum ClothesLayer
+    public record ClothesLayer
     {
-        BASE_LAYER,
-        MID_LAYER,
-        OUTER_LAYER,
-        ACCESSORY,
-        FOOTWEAR,
-        HEADWEAR,
-        BOTTOMWEAR
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public ICollection<ClothesType> ClothesTypes { get; set; }      
     }
 }

@@ -1,31 +1,24 @@
-﻿using VirtualWardrobe_ClothesTypes.Web.Dto;
+﻿using VirtualWardrobe_ClothesTypes.Dto;
 
 namespace VirtualWardrobe_ClothesTypes.Model
 {
     public class ClothesType
     {
-        public Guid Id { get; set; }
+        public required Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        public ClothesLayer Layer { get; set; }
+        public required ClothesLayer Layer { get; set; }
 
         public ClothesTypeDto ToDto()
         {
-            return new ClothesTypeDto(this.Id, this.Name, this.Layer.ToString());
+            return new ClothesTypeDto(this.Id, this.Name, this.Layer.ToString() ?? string.Empty);
         }
 
-        public ClothesType Update(UpdateClothesTypeDto updateClothesTypeDto)
+        public ClothesType Update(string updateName, ClothesLayer updatelayer)
         {
-            this.Name = updateClothesTypeDto.Name == null ? this.Name : updateClothesTypeDto.Name;
-            try
-            {
-                this.Layer = updateClothesTypeDto.Layer == null ? this.Layer : Enum.Parse<ClothesLayer>(updateClothesTypeDto.Layer);
-            }
-            catch (Exception ex)
-            {
-                this.Layer = this.Layer;
-            }
+            this.Name = updateName;
+            this.Layer = updatelayer;
 
             return this;
         }

@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/VirtualWardrobe_ClothesTypes/VirtualWardrobe_ClothesTypes.csproj" />
   </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/VirtualWardrobe_ClothesTypes.Tests/VirtualWardrobe_ClothesTypes.Tests.csproj" Id="453ddefd-8be8-4510-84be-38bcb95d3004" />
+  </Folder>
 </Solution>
