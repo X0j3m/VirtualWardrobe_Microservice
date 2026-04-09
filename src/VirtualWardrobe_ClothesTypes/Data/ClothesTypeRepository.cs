@@ -64,8 +64,7 @@ namespace VirtualWardrobe_ClothesTypes.Data
                 {
                     throw new InvalidOperationException($"Clothes Type with name {clothesType.Name} already exists.");
                 }
-                var found = _context.ClothesTypes.First(x => x.Id == clothesType.Id);
-                found = clothesType;
+                _context.Update(clothesType);
                 _context.SaveChanges();
                 return;
             }
